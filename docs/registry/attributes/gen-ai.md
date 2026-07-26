@@ -87,6 +87,8 @@ SHOULD leave it unset otherwise.
 **[4] `gen_ai.evaluation.evaluator.id`:** The evaluator id should be a stable identifier for the evaluator definition. To maintain valid comparability, results SHOULD be grouped by `(evaluator.id, evaluator.version)` to prevent invalid aggregations when querying the data.
 
 **[5] `gen_ai.evaluation.evaluator.type`:** `gen_ai.evaluation.evaluator.type` describes who or what produced the score (e.g., a human or an LLM). This is independent of `gen_ai.evaluation.scope`, which describes the unit of the evaluation.
+It is also independent of when the score was resolved. Resolution timing is a separate axis: a score MAY be produced while the evaluated operation is still in scope, or later, once a result is known. `outcome` scores are typically resolved later, but any evaluator type MAY resolve at either time, and implementations SHOULD NOT infer one from the other.
+`outcome` is distinct from `human` even when a person is involved. `human` is a reviewer scoring the output. `outcome` is a downstream result observed and recorded as a score, whether or not a person produced it: an automated system confirming a prediction held, or an editor keeping or discarding a generated clip in the normal course of their work. The distinction is whether the source was asked to evaluate.
 
 **[6] `gen_ai.evaluation.evaluator.version`:** The version MUST change when any score-affecting part of the definition changes (e.g., for an `llm_judge`: the model, rubric, or scoring config). To maintain valid comparability, results SHOULD be grouped by `(evaluator.id, evaluator.version)`.
 
@@ -310,6 +312,7 @@ If there is no low-cardinality workflow name available for a given framework, th
 | `deterministic` | Evaluation performed by a deterministic script or rule-based system. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `human` | Evaluation performed by a human reviewer. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `llm_judge` | Evaluation performed by a Large Language Model. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `outcome` | Evaluation derived from an observed real-world outcome rather than from a check, a model's opinion, or a reviewer's judgment. | ![Development](https://img.shields.io/badge/-development-blue) |
 
 ---
 

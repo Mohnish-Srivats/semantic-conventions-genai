@@ -836,6 +836,10 @@ attributes:
           value: "human"
           brief: "Evaluation performed by a human reviewer."
           stability: development
+        - id: outcome
+          value: "outcome"
+          brief: "Evaluation derived from an observed real-world outcome rather than from a check, a model's opinion, or a reviewer's judgment."
+          stability: development
         - id: custom
           value: "custom"
           brief: "Custom or unspecified evaluator type."
@@ -843,6 +847,10 @@ attributes:
     brief: The type of evaluator.
     note: >
       `gen_ai.evaluation.evaluator.type` describes who or what produced the score (e.g., a human or an LLM). This is independent of `gen_ai.evaluation.scope`, which describes the unit of the evaluation.
+
+      It is also independent of when the score was resolved. Resolution timing is a separate axis: a score MAY be produced while the evaluated operation is still in scope, or later, once a result is known. `outcome` scores are typically resolved later, but any evaluator type MAY resolve at either time, and implementations SHOULD NOT infer one from the other.
+
+      `outcome` is distinct from `human` even when a person is involved. `human` is a reviewer scoring the output. `outcome` is a downstream result observed and recorded as a score, whether or not a person produced it: an automated system confirming a prediction held, or an editor keeping or discarding a generated clip in the normal course of their work. The distinction is whether the source was asked to evaluate.
     stability: development
   - key: gen_ai.evaluation.reference_set.id
     type: string
